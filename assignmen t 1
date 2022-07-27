@@ -1,0 +1,221 @@
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+4 rows in set (0.00 sec)
+
+mysql> create database hospital;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| hospital           |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use hospital;
+Database changed
+mysql> create table hospitalInfo;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> create table hospitalInfo(patientId int, patientName varchar(20),city varchar(20), date int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from hospitalInfo;
+Empty set (0.01 sec)
+
+mysql> insert into hospitalInfo values(1,"arun","mumbai",4);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+
+| patientId | patientName | city   | date |
++-----------+-------------+--------+------+
+|         1 | arun        | mumbai |    4 |
++-----------+-------------+--------+------+
+1 row in set (0.00 sec)
+
+mysql> alter table hospitalInfo add mobile int;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+--------+
+| patientId | patientName | city   | date | mobile |
++-----------+-------------+--------+------+--------+
+|         1 | arun        | mumbai |    4 |   NULL |
++-----------+-------------+--------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+--------+
+| patientId | patientName | city   | date | mobile |
++-----------+-------------+--------+------+--------+
+|         1 | arun        | mumbai |    4 |   NULL |
++-----------+-------------+--------+------+--------+
+1 row in set (0.00 sec)
+
+mysql> insert into hospitalInfo values(2,"akash","thane",5,9850363440),(3,"anirudh","parel",6,124234455);
+ERROR 1264 (22003): Out of range value for column 'mobile' at row 1
+mysql> insert into hospitalInfo values(2,"akash","thane",5,9850363),(3,"anirudh","parel",6,124234);
+Query OK, 2 rows affected (0.03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+---------+
+| patientId | patientName | city   | date | mobile  |
++-----------+-------------+--------+------+---------+
+|         1 | arun        | mumbai |    4 |    NULL |
+|         2 | akash       | thane  |    5 | 9850363 |
+|         3 | anirudh     | parel  |    6 |  124234 |
++-----------+-------------+--------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> alter table hospitalInfo modify column mobile varchar(15);
+Query OK, 3 rows affected (0.05 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+---------+
+| patientId | patientName | city   | date | mobile  |
++-----------+-------------+--------+------+---------+
+|         1 | arun        | mumbai |    4 | NULL    |
+|         2 | akash       | thane  |    5 | 9850363 |
+|         3 | anirudh     | parel  |    6 | 124234  |
++-----------+-------------+--------+------+---------+
+3 rows in set (0.00 sec)
+
+mysql> insert into hospitalInfo values(2,"akash","thane",5,9850363440),(3,"anirudh","parel",6,1234567898);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+------------+
+| patientId | patientName | city   | date | mobile     |
++-----------+-------------+--------+------+------------+
+|         1 | arun        | mumbai |    4 | NULL       |
+|         2 | akash       | thane  |    5 | 9850363    |
+|         3 | anirudh     | parel  |    6 | 124234     |
+|         2 | akash       | thane  |    5 | 9850363440 |
+|         3 | anirudh     | parel  |    6 | 1234567898 |
++-----------+-------------+--------+------+------------+
+5 rows in set (0.00 sec)
+
+mysql> delete hospitalInfo where mobile = 9850363;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where mobile = 9850363' at line 1
+mysql> delete hospitalInfo where mobile ="9850363";
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where mobile ="9850363"' at line 1
+mysql> delete from hospitalInfo where mobile ="9850363";
+Query OK, 1 row affected (0.03 sec)
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+------------+
+| patientId | patientName | city   | date | mobile     |
++-----------+-------------+--------+------+------------+
+|         1 | arun        | mumbai |    4 | NULL       |
+|         3 | anirudh     | parel  |    6 | 124234     |
+|         2 | akash       | thane  |    5 | 9850363440 |
+|         3 | anirudh     | parel  |    6 | 1234567898 |
++-----------+-------------+--------+------+------------+
+4 rows in set (0.00 sec)
+
+mysql> delete from hospitalInfo where mobile ="124234";
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+------------+
+| patientId | patientName | city   | date | mobile     |
++-----------+-------------+--------+------+------------+
+|         1 | arun        | mumbai |    4 | NULL       |
+|         2 | akash       | thane  |    5 | 9850363440 |
+|         3 | anirudh     | parel  |    6 | 1234567898 |
++-----------+-------------+--------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> update hospitalInfo set mobile = "8623989808" where patientId = 1;
+Query OK, 1 row affected (0.03 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from hospitalInfo;
++-----------+-------------+--------+------+------------+
+| patientId | patientName | city   | date | mobile     |
++-----------+-------------+--------+------+------------+
+|         1 | arun        | mumbai |    4 | 8623989808 |
+|         2 | akash       | thane  |    5 | 9850363440 |
+|         3 | anirudh     | parel  |    6 | 1234567898 |
++-----------+-------------+--------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> alter table hospitalInfo rename column city to patientCity;
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from hospitalInfo;
++-----------+-------------+-------------+------+------------+
+| patientId | patientName | patientCity | date | mobile     |
++-----------+-------------+-------------+------+------------+
+|         1 | arun        | mumbai      |    4 | 8623989808 |
+|         2 | akash       | thane       |    5 | 9850363440 |
+|         3 | anirudh     | parel       |    6 | 1234567898 |
++-----------+-------------+-------------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> create table newAdmission(name varchar(20), Id int, fess int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_hospital |
++--------------------+
+| hospitalInfo       |
+| newAdmission       |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> insert into newAdmission values("aravind",76,16000);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from hospitalInfo;
++-----------+-------------+-------------+------+------------+
+| patientId | patientName | patientCity | date | mobile     |
++-----------+-------------+-------------+------+------------+
+|         1 | arun        | mumbai      |    4 | 8623989808 |
+|         2 | akash       | thane       |    5 | 9850363440 |
+|         3 | anirudh     | parel       |    6 | 1234567898 |
++-----------+-------------+-------------+------+------------+
+3 rows in set (0.00 sec)
+
+mysql> drop table newAdmission;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_hospital |
++--------------------+
+| hospitalInfo       |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> select * from hospitalInfo;
++-----------+-------------+-------------+------+------------+
+| patientId | patientName | patientCity | date | mobile     |
++-----------+-------------+-------------+------+------------+
+|         1 | arun        | mumbai      |    4 | 8623989808 |
+|         2 | akash       | thane       |    5 | 9850363440 |
+|         3 | anirudh     | parel       |    6 | 1234567898 |
++-----------+-------------+-------------+------+------------+
+3 rows in set (0.01 sec)
+
+
