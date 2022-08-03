@@ -1,0 +1,222 @@
+6 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Persons (
+    ->     ID int NOT NULL,
+    ->     LastName varchar(255) NOT NULL,
+    ->     FirstName varchar(255) NOT NULL,
+    ->     Age int
+    -> ); 
+ERROR 1046 (3D000): No database selected
+mysql> create table person(id int not null, lastname varchar(20), firstname varchar(20) not null,age int);
+ERROR 1046 (3D000): No database selected
+mysql> use profile
+Database changed
+mysql> create table person(id int not null, lastname varchar(20), firstname varchar(20) not null,age int);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into person values(null,"burla", "Aravind", 20);
+ERROR 1048 (23000): Column 'id' cannot be null
+mysql> insert into person values(null,"burla", null, 20);
+ERROR 1048 (23000): Column 'id' cannot be null
+mysql> insert into person values(1,"burla", "Aravind", 20);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person;
++----+----------+-----------+------+
+| id | lastname | firstname | age  |
++----+----------+-----------+------+
+|  1 | burla    | Aravind   |   20 |
++----+----------+-----------+------+
+1 row in set (0.00 sec)
+
+mysql> create table person1(id int, lastname varchar(20), firstname varchar(20), age int,unique id);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> create table person1(id int unique, lastname varchar(20), firstname varchar(20), age int);
+
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into person1 values(1,"burla", "aravind",19);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into person1 values(1,"burla", "arun",19);
+ERROR 1062 (23000): Duplicate entry '1' for key 'person1.id'
+mysql> insert into person1 values(2,"burla", "arun",19);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person1;
++------+----------+-----------+------+
+| id   | lastname | firstname | age  |
++------+----------+-----------+------+
+|    1 | burla    | aravind   |   19 |
+|    2 | burla    | arun      |   19 |
++------+----------+-----------+------+
+2 rows in set (0.00 sec)
+
+mysql> create table person2(int id primary key, name varchar(20), age int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int id primary key, name varchar(20), age int)' at line 1
+mysql> create table person2(id int  primary key, name varchar(20), age int);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into person2(1,"aravind",20)
+    -> insert into person2(1,"aravind",20);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,"aravind",20)
+insert into person2(1,"aravind",20)' at line 1
+mysql> insert into person2 values(1,"aravind",201);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> delete from person2 where id 1=1 ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1=1' at line 1
+mysql> delete from person2 where id =1;
+Query OK, 1 row affected (0.04 sec)
+
+mysql> select * from person2;
+Empty set (0.01 sec)
+
+mysql> insert into person2 values(1,"aravind",20);
+Query OK, 1 row affected (0.03 sec)
+
+mysql> insert into person2 values(1,"arun",19);
+ERROR 1062 (23000): Duplicate entry '1' for key 'person2.PRIMARY'
+mysql> insert into person2 values(null,"arun",19);
+ERROR 1048 (23000): Column 'id' cannot be null
+mysql> select * from person2;
++----+---------+------+
+| id | name    | age  |
++----+---------+------+
+|  1 | aravind |   20 |
++----+---------+------+
+1 row in set (0.00 sec)
+
+mysql> create table person3(id int, name varchar(20),age int check (age>=18));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into person3 values(1,"aravind",15);
+ERROR 3819 (HY000): Check constraint 'person3_chk_1' is violated.
+mysql> insert into person3 values(1,"aravind",18);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into person3 values(2,"arun",19);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person3;
++------+---------+------+
+| id   | name    | age  |
++------+---------+------+
+|    1 | aravind |   18 |
+|    2 | arun    |   19 |
++------+---------+------+
+2 rows in set (0.01 sec)
+
+mysql> create table  person4(id int, name varchar(20),std int default 12);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into  person4 values(1,"aravind");
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into  person4 (id int , name varchar(20), std)  values(1,"aravind");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int , name varchar(20), std)  values(1,"aravind")' at line 1
+mysql> insert into  person4 (id int , name varchar(20))  values(1,"aravind");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int , name varchar(20))  values(1,"aravind")' at line 1
+mysql> insert into  person4 (id , name)  values(1,"aravind");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person4;
++------+---------+------+
+| id   | name    | std  |
++------+---------+------+
+|    1 | aravind |   12 |
++------+---------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into  person4 (id , name)  values(2,"arun");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into  person4 values(1,"aravind");
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into  person4 values(1,"aravind",);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> insert into  person4 values(1,"aravind",11);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person4;
++------+---------+------+
+| id   | name    | std  |
++------+---------+------+
+|    1 | aravind |   12 |
+|    2 | arun    |   12 |
+|    1 | aravind |   11 |
++------+---------+------+
+3 rows in set (0.01 sec)
+
+mysql> create table person5(id int primary key auto_increment, name varchar(20), age int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into person5 values("aavind",18);
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into person5(name , age) values("aavind",18);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from person5;
++----+--------+------+
+| id | name   | age  |
++----+--------+------+
+|  1 | aavind |   18 |
++----+--------+------+
+1 row in set (0.00 sec)
+
+mysql> insert into person5(name , age) values("aavind",18),("arun",20);
+Query OK, 2 rows affected (0.02 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from person5;
++----+--------+------+
+| id | name   | age  |
++----+--------+------+
+|  1 | aavind |   18 |
+|  2 | aavind |   18 |
+|  3 | arun   |   20 |
++----+--------+------+
+3 rows in set (0.00 sec)
+
+mysql> delete from person5 where id = 2;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person5;
++----+--------+------+
+| id | name   | age  |
++----+--------+------+
+|  1 | aavind |   18 |
+|  3 | arun   |   20 |
++----+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> create table person6(id int primary key auto_increment , name varchar(20), std int default
+ 12 , age int check (age>18) )
+    -> create table person6(id int primary key auto_increment , name varchar(20), std int default 12 , age int check (age>18) );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'create table person6(id int primary key auto_increment , name varchar(20), std i' at line 2
+mysql>  create table person6(id int primary key auto_increment , name varchar(20), std int default 12 , age int check (age>18) );
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> insert into person6(name, age) values("aravind",19);
+Query OK, 1 row affected (0.02 sec)
+
+mysql> select * from person6;
++----+---------+------+------+
+| id | name    | std  | age  |
++----+---------+------+------+
+|  1 | aravind |   12 |   19 |
++----+---------+------+------+
+1 row in set (0.00 sec)
+
+mysql> select * from person6
+    -> select * from person6;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select * from person6' at line 2
+mysql> select * from person6;
++----+---------+------+------+
+| id | name    | std  | age  |
++----+---------+------+------+
+|  1 | aravind |   12 |   19 |
++----+---------+------+------+
+1 row in set (0.00 sec)
+
+mysql> 
+
