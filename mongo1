@@ -1,0 +1,216 @@
+ use db.config();
+MongoshInvalidInputError: [COMMON-10001] Invalid database name: db.config()
+test> use db.config()
+MongoshInvalidInputError: [COMMON-10001] Invalid database name: db.config()
+test> show dbs
+admin   40.00 KiB
+class   40.00 KiB
+config  96.00 KiB
+local   72.00 KiB
+test> use book
+switched to db book
+book> book.find()
+ReferenceError: book is not defined
+book> use config
+switched to db config
+config> config.find()
+TypeError: config.find is not a function
+config> config.find();
+TypeError: config.find is not a function
+config> db.config().find
+TypeError: db.config is not a function
+config> use book()
+switched to db book()
+book()>  db.createCollection("Library");
+{ ok: 1 }
+book()> db.library.insert({"b_id":1,"name":"c++"});
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("6345ba02207f1825893999a0") }
+}
+book()> db.library.insertOne({"b_id":2,"name":"Java"});
+{
+  acknowledged: true,
+  insertedId: ObjectId("6345ba20207f1825893999a1")
+}
+book()>  db.library.insertOne({"b_id":3,"name":"DSA"});
+{
+  acknowledged: true,
+  insertedId: ObjectId("6345ba51207f1825893999a2")
+}
+book()> db.library.find();
+[
+  { _id: ObjectId("6345ba02207f1825893999a0"), b_id: 1, name: 'c++' },
+  { _id: ObjectId("6345ba20207f1825893999a1"), b_id: 2, name: 'Java' },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' }
+]
+book()> db.library.find().pretty();
+[
+  { _id: ObjectId("6345ba02207f1825893999a0"), b_id: 1, name: 'c++' },
+  { _id: ObjectId("6345ba20207f1825893999a1"), b_id: 2, name: 'Java' },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' }
+]
+book()> b.library.update({"name":"Java"},{$set:{"name":"Java-jdk"}});
+ReferenceError: b is not defined
+book()> db.library.update({"name":"Java"},{$set:{"name":"Java-jdk"}});
+DeprecationWarning: Collection.update() is deprecated. Use updateOne, updateMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+book()> {
+... db.library.update({"name":"c++"},{$set:{"name":"C++_7.0"}});
+... {
+... 
+... 
+... 
+... db.library.update({"name":"c++"},{$set:{"name":"C++_7.0"}});
+... 
+book()> db.library.update({"name":"c++"},{$set:{"name":"C++_7.0"}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+book()> db.library.find();
+[
+  {
+    _id: ObjectId("6345ba02207f1825893999a0"),
+    b_id: 1,
+    name: 'C++_7.0'
+  },
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' }
+]
+book()> db.library.remove({"b_id":1});
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+book()> db.library.find();
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' }
+]
+book()> db.library.find({"name":"DSA"})
+[ { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' } ]
+book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("6345bd4e207f1825893999a3") }
+}
+book()> {
+... 
+book()> db.library.find();
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' },
+  {
+    _id: ObjectId("6345bd4e207f1825893999a3"),
+    b_id: 4,
+    name: 'Java-jdk',
+    desc: 'fake book'
+  }
+]
+book()>  db.library.find()
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' },
+  {
+    _id: ObjectId("6345bd4e207f1825893999a3"),
+    b_id: 4,
+    name: 'Java-jdk',
+    desc: 'fake book'
+  }
+]
+book()>  db.library.find()
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' },
+  {
+    _id: ObjectId("6345bd4e207f1825893999a3"),
+    b_id: 4,
+    name: 'Java-jdk',
+    desc: 'fake book'
+  }
+]
+book()>  db.library.find().pretty()
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' },
+  {
+    _id: ObjectId("6345bd4e207f1825893999a3"),
+    b_id: 4,
+    name: 'Java-jdk',
+    desc: 'fake book'
+  }
+]
+book()>  db.library.find().pretty();
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' },
+  {
+    _id: ObjectId("6345bd4e207f1825893999a3"),
+    b_id: 4,
+    name: 'Java-jdk',
+    desc: 'fake book'
+  }
+]
+book()> book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+ReferenceError: book is not defined
+book()> book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+ReferenceError: book is not defined
+book()> book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+ReferenceError: book is not defined
+book()> book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+ReferenceError: book is not defined
+book()> book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+ReferenceError: book is not defined
+book()> book()> db.library.insert({"b_id":4,"name":"Java-jdk","desc":"fake book"});
+ReferenceError: book is not defined
+book()> db.library.find();
+[
+  {
+    _id: ObjectId("6345ba20207f1825893999a1"),
+    b_id: 2,
+    name: 'Java-jdk'
+  },
+  { _id: ObjectId("6345ba51207f1825893999a2"), b_id: 3, name: 'DSA' },
+  {
+    _id: ObjectId("6345bd4e207f1825893999a3"),
+    b_id: 4,
+    name: 'Java-jdk',
+    desc: 'fake book'
+
